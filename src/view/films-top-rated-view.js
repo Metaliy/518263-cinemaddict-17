@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import View from './view-class-preset';
 
 const createFilmsTopRatedTemplate = () =>
   `<section class="films-list films-list--extra">
@@ -47,20 +47,14 @@ const createFilmsTopRatedTemplate = () =>
   </div>
 </section>`;
 
-export default class FilmsTopRatedView {
+export default class FilmsTopRatedView extends View {
+
+  constructor() {
+    super();
+  }
+
   getTemplate() {
     return createFilmsTopRatedTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }

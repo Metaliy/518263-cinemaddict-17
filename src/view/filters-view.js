@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import View from './view-class-preset';
 
 const createNavTemplate = () =>
   `<nav class="main-navigation">
@@ -8,21 +8,15 @@ const createNavTemplate = () =>
    <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
   </nav>`;
 
-export default class MainNavView {
+export default class MainNavView extends View {
+
+  constructor() {
+    super();
+  }
+
   getTemplate() {
     return createNavTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
 

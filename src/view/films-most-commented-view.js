@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import View from './view-class-preset';
 
 const createFilmsMostCommentedTemplate = () =>
   `<section class="films-list films-list--extra">
@@ -48,20 +48,14 @@ const createFilmsMostCommentedTemplate = () =>
 </section>
 </section>`;
 
-export default class FilmsMostCommentedView {
+export default class FilmsMostCommentedView extends View {
+
+  constructor() {
+    super();
+  }
+
   getTemplate() {
     return createFilmsMostCommentedTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }

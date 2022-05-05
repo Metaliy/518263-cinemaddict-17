@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import View from './view-class-preset';
 
 const createNavTemplate = () =>
   `<ul class="sort">
@@ -7,21 +7,15 @@ const createNavTemplate = () =>
 <li><a href="#" class="sort__button">Sort by rating</a></li>
 </ul>`;
 
-export default class SortView {
+export default class SortView extends View {
+
+  constructor() {
+    super();
+  }
+
   getTemplate() {
     return createNavTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
 

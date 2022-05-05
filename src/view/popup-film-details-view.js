@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import View from './view-class-preset';
 
 const createPopupFilmDetailsTemplate = () =>
   `<section class="film-details">
@@ -166,20 +166,15 @@ const createPopupFilmDetailsTemplate = () =>
   </form>
 </section>`;
 
-export default class PopupFilmDetailsView {
+export default class PopupFilmDetailsView extends View {
+
+  constructor() {
+    super();
+  }
+
   getTemplate() {
     return createPopupFilmDetailsTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
