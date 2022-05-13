@@ -6,9 +6,13 @@ import FilmsCardView from '../view/film-card-view';
 import FilmsTopRatedView from '../view/films-top-rated-view';
 import FilmsMostCommentedView from '../view/films-most-commented-view';
 import ShowMoreButtonView from '../view/show-more-button-view';
+import PopupFilmDetailsView from '../view/popup-film-details-view';
+import FilmsPopupCommentView from '../view/film-popup-comment-view';
 
-const CARD_COUNT = 5;
-
+const getIdFilteredArray = (filmiD, commentsArray) => {
+  const fillteredArray = commentsArray.filter((item) => item.id === filmiD);
+  return fillteredArray;
+};
 
 export default class FilmSectionPresenter {
 
@@ -16,9 +20,12 @@ export default class FilmSectionPresenter {
   filmList = new FilmsListView();
   filmListContainer = new FilmsListContainerView();
 
-  init = (mainBlock) => {
+  init = (mainBlock, filmsModel) => {
 
     this.mainBlock = mainBlock;
+    this.filmsModel = filmsModel;
+    this.filmsList = [...this.filmsModel.getFilm()];
+    this.commentList = [...this.filmsModel.getComment()];
 
     render(this.filmContainer, this.mainBlock);
     render(this.filmList, this.filmContainer.getElement());
@@ -28,10 +35,17 @@ export default class FilmSectionPresenter {
     render(new FilmsTopRatedView(), this.filmContainer.getElement());
     render(new FilmsMostCommentedView(), this.filmContainer.getElement());
 
-    for (let i = 0; i <CARD_COUNT; i++) {
-      render(new FilmsCardView(), this.filmListContainer.getElement());
+    for (let i = 0; i <this.filmsList.length; i++) {
+      render(new FilmsCardView(this.filmsList[i]), this.filmListContainer.getElement());
+      this.filmsList[i].id = i;
     }
 
+    this.filteredArray = getIdFilteredArray(this.filmsList[0].id, this.commentList);
 
+    render(new PopupFilmDetailsView(this.filmsList[0]), document.querySelector('body'));
+
+    for (let i = 0; i < this.filteredArray.length; i++) {
+      render(new FilmsPopupCommentView(this.filteredArray[i]), document.querySelector('.film-details__comments-list'));
+    }
   };
 }
