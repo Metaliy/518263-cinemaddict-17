@@ -53,7 +53,7 @@ export default class FilmsTopRatedView extends View {
     super();
   }
 
-  getTemplate() {
+  get template() {
     return createFilmsTopRatedTemplate();
   }
 

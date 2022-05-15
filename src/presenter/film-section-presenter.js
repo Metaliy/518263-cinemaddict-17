@@ -16,33 +16,40 @@ const getIdFilteredArray = (filmiD, commentsArray) => {
 
 export default class FilmSectionPresenter {
 
-  filmContainer = new FilmsView();
-  filmList = new FilmsListView();
-  filmListContainer = new FilmsListContainerView();
+  #filmContainer = new FilmsView();
+  #filmList = new FilmsListView();
+  #filmListContainer = new FilmsListContainerView();
+  #mainBlock = null;
+  #filmsModel = null;
+  #filmsList = null;
+  #commentList = null;
 
   init = (mainBlock, filmsModel) => {
 
-    this.mainBlock = mainBlock;
-    this.filmsModel = filmsModel;
-    this.filmsList = [...this.filmsModel.getFilm()];
-    this.commentList = [...this.filmsModel.getComment()];
+    this.#mainBlock = mainBlock;
+    this.#filmsModel = filmsModel;
+    this.#filmsList = this.#filmsModel.films;
+    this.#commentList = this.#filmsModel.comments;
 
-    render(this.filmContainer, this.mainBlock);
-    render(this.filmList, this.filmContainer.getElement());
-    render(this.filmListContainer, this.filmList.getElement());
-    render(new ShowMoreButtonView(), this.filmContainer.getElement());
+    render(this.#filmContainer, this.#mainBlock);
+    render(this.#filmList, this.#filmContainer.element);
+    render(this.#filmListContainer, this.#filmList.element);
+    render(new ShowMoreButtonView(), this.#filmContainer.element);
 
-    render(new FilmsTopRatedView(), this.filmContainer.getElement());
-    render(new FilmsMostCommentedView(), this.filmContainer.getElement());
+    render(new FilmsTopRatedView(), this.#filmContainer.element);
+    render(new FilmsMostCommentedView(), this.#filmContainer.element);
 
-    for (let i = 0; i <this.filmsList.length; i++) {
-      render(new FilmsCardView(this.filmsList[i]), this.filmListContainer.getElement());
-      this.filmsList[i].id = i;
+    for (let i = 0; i <this.#filmsList.length; i++) {
+      render(new FilmsCardView(this.#filmsList[i]), this.#filmListContainer.element);
+      this.#filmsList[i].id = i;
     }
 
-    this.filteredArray = getIdFilteredArray(this.filmsList[0].id, this.commentList);
+    this.filteredArray = getIdFilteredArray(this.#filmsList[0].id, this.#commentList);
 
-    render(new PopupFilmDetailsView(this.filmsList[0]), document.querySelector('body'));
+  };
+
+  #renderPopup = (film) => {
+    render(new PopupFilmDetailsView(film), document.querySelector('body'));
 
     for (let i = 0; i < this.filteredArray.length; i++) {
       render(new FilmsPopupCommentView(this.filteredArray[i]), document.querySelector('.film-details__comments-list'));

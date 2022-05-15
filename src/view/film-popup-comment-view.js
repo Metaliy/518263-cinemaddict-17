@@ -31,7 +31,7 @@ export default class FilmsPopupCommentView extends View {
     this.commentArrayItem = commentArrayItem;
   }
 
-  getTemplate() {
+  get template() {
     return createFilmPopupComment(this.commentArrayItem);
   }
 

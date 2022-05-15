@@ -40,7 +40,7 @@ export default class FilmCardView extends View {
     this.film = film;
   }
 
-  getTemplate() {
+  get template() {
     return createFilmCardTemplate(this.film);
   }
 

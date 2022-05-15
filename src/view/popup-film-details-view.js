@@ -129,7 +129,7 @@ export default class PopupFilmDetailsView extends View {
     this.film = film;
   }
 
-  getTemplate() {
+  get template() {
     return createPopupFilmDetailsTemplate(this.film);
   }
 

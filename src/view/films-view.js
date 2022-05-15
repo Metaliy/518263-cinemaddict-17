@@ -11,7 +11,7 @@ export default class FilmsView extends View {
     super();
   }
 
-  getTemplate() {
+  get template() {
     return createFilmsTemplate();
   }
 
