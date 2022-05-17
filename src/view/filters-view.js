@@ -14,7 +14,7 @@ export default class MainNavView extends View {
     super();
   }
 
-  getTemplate() {
+  get template() {
     return createNavTemplate();
   }
 

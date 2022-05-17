@@ -12,7 +12,7 @@ export default class UserRaitingView extends View {
     super();
   }
 
-  getTemplate() {
+  get template() {
     return createNavTemplate();
   }
 
