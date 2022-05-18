@@ -21,4 +21,4 @@ const isEscKeyPressed = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
 
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
-export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, escKeyPressed};
+export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, isEscKeyPressed};
