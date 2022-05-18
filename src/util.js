@@ -16,7 +16,7 @@ const getRuntimeFromMins = (mins) => {
   return `${hour}h ${min}m`;
 };
 
-const escKeyPressed = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
+const isEscKeyPressed = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
 
 
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];

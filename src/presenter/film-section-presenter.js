@@ -8,7 +8,7 @@ import FilmsMostCommentedView from '../view/films-most-commented-view';
 import ShowMoreButtonView from '../view/show-more-button-view';
 import PopupFilmDetailsView from '../view/popup-film-details-view';
 import FilmsPopupCommentView from '../view/film-popup-comment-view';
-import {escKeyPressed} from '../util';
+import {isEscKeyPressed} from '../util';
 
 const getIdFilteredArray = (filmiD, commentsArray) => {
   const fillteredArray = commentsArray.filter((item) => item.id === filmiD);
@@ -66,7 +66,7 @@ export default class FilmSectionPresenter {
       render(popupComponent, document.querySelector('body'));
 
       const onEscKeyDown = (evt) => {
-        if(escKeyPressed(evt)) {
+        if(isEscKeyPressed(evt)) {
           popupComponent.element.remove();
           document.body.classList.remove('hide-overflow');
           document.removeEventListener('keydown', onEscKeyDown);
