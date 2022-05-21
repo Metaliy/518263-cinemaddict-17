@@ -27,7 +27,7 @@ const EMOJIS = [
 ];
 
 export const generateComment = () => ({
-  id: getRandomInteger(0, 4),
+  id: getRandomInteger(0, 11),
   author: getRandomArrayElement(AUTHORS),
   comment: getRandomArrayElement(TEXTS),
   date: '2019-05-11T16:12:32.554Z',
