@@ -55,7 +55,6 @@ export default class FilmSectionPresenter {
 
 
       for (let i = 0; i < Math.min(this.#filmsList.length, FILM_COUNT_PER_STEP); i++) {
-        this.#filmsList[i].id = i;
         this.#renderFilms(this.#filmsList[i], this.#commentList);
       }
 
