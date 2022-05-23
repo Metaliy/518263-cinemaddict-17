@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 
 const createFilmsTopRatedTemplate = () =>
   `<section class="films-list films-list--extra">
@@ -47,11 +47,7 @@ const createFilmsTopRatedTemplate = () =>
   </div>
 </section>`;
 
-export default class FilmsTopRatedView extends View {
-
-  constructor() {
-    super();
-  }
+export default class FilmsTopRatedView extends AbstractView {
 
   get template() {
     return createFilmsTopRatedTemplate();

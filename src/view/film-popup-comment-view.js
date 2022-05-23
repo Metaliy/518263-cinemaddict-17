@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 import { humanizeReleaseDate } from '../util';
 
 
@@ -24,7 +24,7 @@ const createFilmPopupComment = (commentArrayItem) => {
 </li>`;
 };
 
-export default class FilmsPopupCommentView extends View {
+export default class FilmsPopupCommentView extends AbstractView {
 
   constructor(commentArrayItem) {
     super();

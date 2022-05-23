@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
 const createPopupFilmDetailsTemplate = (film) => {
@@ -122,7 +122,7 @@ const createPopupFilmDetailsTemplate = (film) => {
 
 };
 
-export default class PopupFilmDetailsView extends View {
+export default class PopupFilmDetailsView extends AbstractView {
 
   constructor(film) {
     super();
@@ -132,6 +132,16 @@ export default class PopupFilmDetailsView extends View {
   get template() {
     return createPopupFilmDetailsTemplate(this.film);
   }
+
+  setCloseButtonClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#CloseButtonClickHandler);
+  };
+
+  #CloseButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 
 
 }

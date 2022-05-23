@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 
 const createNavTemplate = () =>
   `<nav class="main-navigation">
@@ -8,11 +8,7 @@ const createNavTemplate = () =>
    <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
   </nav>`;
 
-export default class MainNavView extends View {
-
-  constructor() {
-    super();
-  }
+export default class MainNavView extends AbstractView {
 
   get template() {
     return createNavTemplate();
