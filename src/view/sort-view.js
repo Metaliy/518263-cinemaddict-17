@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 
-const createNavTemplate = () =>
+const createSortTemplate = () =>
   `<ul class="sort">
 <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
 <li><a href="#" class="sort__button">Sort by date</a></li>
@@ -10,7 +10,7 @@ const createNavTemplate = () =>
 export default class SortView extends AbstractView {
 
   get template() {
-    return createNavTemplate();
+    return createSortTemplate();
   }
 
 }
