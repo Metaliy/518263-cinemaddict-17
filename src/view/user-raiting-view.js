@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 
 const createRatingTemplate = () =>
   `<section class="header__profile profile">
@@ -6,11 +6,7 @@ const createRatingTemplate = () =>
   <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
 </section>`;
 
-export default class UserRaitingView extends View {
-
-  constructor() {
-    super();
-  }
+export default class UserRaitingView extends AbstractView {
 
   get template() {
     return createRatingTemplate();

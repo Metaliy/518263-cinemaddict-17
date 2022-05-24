@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 
 const createFilmsMostCommentedTemplate = () =>
   `<section class="films-list films-list--extra">
@@ -48,11 +48,7 @@ const createFilmsMostCommentedTemplate = () =>
 </section>
 </section>`;
 
-export default class FilmsMostCommentedView extends View {
-
-  constructor() {
-    super();
-  }
+export default class FilmsMostCommentedView extends AbstractView {
 
   get template() {
     return createFilmsMostCommentedTemplate();

@@ -1,5 +1,5 @@
 import MainNavView from './view/filters-view';
-import { render } from './render';
+import {render} from './framework/render';
 import SortView from './view/sort-view';
 import UserRaitingView from './view/user-raiting-view';
 import FilmSectionPresenter from './presenter/film-section-presenter';

@@ -1,4 +1,4 @@
-import View from './view-class-preset';
+import AbstractView from '../framework/view/abstract-view';
 
 const createNavTemplate = () =>
   `<ul class="sort">
@@ -7,11 +7,7 @@ const createNavTemplate = () =>
 <li><a href="#" class="sort__button">Sort by rating</a></li>
 </ul>`;
 
-export default class SortView extends View {
-
-  constructor() {
-    super();
-  }
+export default class SortView extends AbstractView {
 
   get template() {
     return createNavTemplate();
