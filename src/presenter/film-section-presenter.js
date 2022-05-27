@@ -1,6 +1,6 @@
 import {render, remove} from '../framework/render';
 import FilmsView from '../view/films-view';
-import MainNavView from '../view/filters-view';
+import MainNavView from '../view/main-nav-view';
 import FilmsListView from '../view/film-list-view';
 import FilmsListContainerView from '../view/film-list-container-view';
 import FilmsCardView from '../view/film-card-view';
@@ -69,14 +69,10 @@ export default class FilmSectionPresenter {
       }
 
       render(this.#topRatedFilms, this.#filmContainer.element);
-
-      for (let i = 0; i < 2; i++) {
-        this.#renderFilms(this.#filmsList[i], this.#commentList, this.#topRatedFilms.element.querySelector('.films-list__container'));
-      }
-
       render(this.#mostCommentedFilms, this.#filmContainer.element);
 
       for (let i = 0; i < 2; i++) {
+        this.#renderFilms(this.#filmsList[i], this.#commentList, this.#topRatedFilms.element.querySelector('.films-list__container'));
         this.#renderFilms(this.#filmsList[i], this.#commentList, this.#mostCommentedFilms.element.querySelector('.films-list__container'));
       }
 
