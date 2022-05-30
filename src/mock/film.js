@@ -33,7 +33,6 @@ const generatePoster = () => {
 
 export const generateFilm = () => ({
   _id: '0',
-  _commentCount: '0',
   filmInfo: {
     title: 'A Little Pony Without The Carpet',
     alternativeTitle: 'Laziness Who Sold Themselves',
@@ -55,7 +54,8 @@ export const generateFilm = () => ({
     genre: [
       'Comedy'
     ],
-    description: generateDescription()
+    description: generateDescription(),
+    commentCount: getRandomInteger(0, 100)
   },
   userDetails: {
     watchlist: Boolean(getRandomInteger(0, 1)),
@@ -70,13 +70,5 @@ export const generateFilm = () => ({
 
   set id(newValue) {
     this._id = newValue;
-  },
-
-  get commentCount() {
-    return this._commentCount ;
-  },
-
-  set commentCount(newValue) {
-    this._commentCount = newValue;
   }
 });
