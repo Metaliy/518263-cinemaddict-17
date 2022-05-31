@@ -50,7 +50,9 @@ export default class FilmSectionPresenter {
         this.#filmsList[i].id = i;
       }
 
-      this.#filmPresenter.init(this.#filmsList, this.#filmListContainer);
+      for (let i = 0; i < Math.min(this.#filmsList.length, this.#FILM_COUNT_PER_STEP); i++) {
+        this.#filmPresenter.init(this.#filmsList[i], this.#filmListContainer);
+      }
 
       if (this.#filmsList.length > this.#FILM_COUNT_PER_STEP) {
         render(this.#showMoreFilmComponent, this.#filmListContainer, 'afterend');
@@ -63,8 +65,10 @@ export default class FilmSectionPresenter {
   };
 
   #changeData = (film) => {
-    const updatedItem = this.#filmList.slice(film.id - 1, film.id);
-    this.#filmPresenter.init(updatedItem);
+    const updatedItem = this.#filmsList.slice(film.id, film.id + 1);
+    film.userDetails.watchlist = true;
+    this.#filmPresenter.init(updatedItem, this.#filmListContainer);
+    return !!film.userDetails.watchlist;
   };
 
   #additionalFilmTops = (filmsList) => {
@@ -76,6 +80,11 @@ export default class FilmSectionPresenter {
 
     render(this.#mostCommentedFilms, this.#filmList.element, 'afterend');
     render(this.#topRatedFilms, this.#filmList.element, 'afterend');
+
+    for (let i = 0; i < 2; i++) {
+      this.#filmPresenter.init(mostCommentedFilms[i], this.#mostCommentedFilms.element.querySelector('.films-list__container'));
+      this.#filmPresenter.init(topRatedFilms[i], this.#topRatedFilms.element.querySelector('.films-list__container'));
+    }
 
     this.#filmPresenter.init(mostCommentedFilms.slice(0, 2), this.#mostCommentedFilms.element.querySelector('.films-list__container'));
     this.#filmPresenter.init(topRatedFilms.slice(0, 2), this.#topRatedFilms.element.querySelector('.films-list__container'));

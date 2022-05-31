@@ -26,15 +26,12 @@ export default class FilmPresenter {
 
   init = (filmList, containerBlock) => {
 
-    for (let i = 0; i < Math.min(filmList.length, this.#FILM_COUNT_PER_STEP); i++) {
-      this.#renderFilms(filmList[i], this.#commentList, containerBlock);
-    }
+    this.#renderFilms(filmList, this.#commentList, containerBlock);
 
   };
 
 
   #renderFilms = (film, commentsArray, parentContainer) => {
-    this.#film = film;
     const filmCardComponent = new FilmsCardView(film);
     render(filmCardComponent, parentContainer);
 
@@ -74,13 +71,13 @@ export default class FilmPresenter {
       document.addEventListener('keydown', onEscKeyDown);
     };
 
+    const handleWatchListClick  = () => {
+      this.#changeData(film);
+    };
+
 
     filmCardComponent.setFilmClickHandler(renderPopup);
-    filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
-  };
-
-  #handleWatchListClick  = () => {
-    this.#changeData(this.#film);
+    filmCardComponent.setWatchlistClickHandler(handleWatchListClick);
   };
 
 }
