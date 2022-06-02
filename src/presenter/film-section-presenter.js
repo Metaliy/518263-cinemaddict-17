@@ -8,6 +8,7 @@ import FilmsMostCommentedView from '../view/films-most-commented-view';
 import EmptyFilmListView from '../view/film-list-empry-title';
 import SortView from '../view/sort-view';
 import FilmPresenter from './film-presenter';
+import { updateItem } from '../util';
 
 export default class FilmSectionPresenter {
 
@@ -24,6 +25,7 @@ export default class FilmSectionPresenter {
   #filmPresenter = new Map();
   #renderedFilmCount = null;
   #FILM_COUNT_PER_STEP = 5;
+  #ADDITIONAL_FILM_COUNT = 2;
 
 
   init = (mainBlock, filmsModel) => {
@@ -32,7 +34,6 @@ export default class FilmSectionPresenter {
     this.#filmsModel = filmsModel;
     this.#filmsList = this.#filmsModel.films;
     this.#commentList = this.#filmsModel.comments;
-    this.#filmPresenter = new FilmPresenter(this.#commentList, this.#changeData);
     this.#renderedFilmCount = this.#FILM_COUNT_PER_STEP;
 
 
@@ -50,25 +51,38 @@ export default class FilmSectionPresenter {
         this.#filmsList[i].id = i;
       }
 
-      for (let i = 0; i < Math.min(this.#filmsList.length, this.#FILM_COUNT_PER_STEP); i++) {
-        this.#filmPresenter.init(this.#filmsList[i], this.#filmListContainer);
-      }
-
-      if (this.#filmsList.length > this.#FILM_COUNT_PER_STEP) {
-        render(this.#showMoreFilmComponent, this.#filmListContainer, 'afterend');
-        this.#showMoreFilmComponent.setClickHandler(this.#handleShowMoreButtonClick);
-      }
+      this.#renderFilmList();
 
     }
     this.#additionalFilmTops(this.#filmsList);
 
   };
 
+  #renderFilm = (film, container) => {
+    const filmPresenter = new FilmPresenter(this.#commentList, this.#changeData);
+    filmPresenter.init(film, container);
+    this.#filmPresenter.set(film.id, filmPresenter);
+  };
+
+  #renderFilms = (from, to, list, container) => {
+    list
+      .slice(from, to)
+      .forEach((film) => this.#renderFilm(film, container));
+  };
+
+  #renderFilmList = () => {
+    this.#renderFilms(0, Math.min(this.#filmsList.length, this.#FILM_COUNT_PER_STEP), this.#filmsList, this.#filmListContainer);
+
+    if (this.#filmsList.length > this.#FILM_COUNT_PER_STEP) {
+      render(this.#showMoreFilmComponent, this.#filmListContainer, 'afterend');
+      this.#showMoreFilmComponent.setClickHandler(this.#handleShowMoreButtonClick);
+    }
+  };
+
+
   #changeData = (film) => {
-    const updatedItem = this.#filmsList.slice(film.id, film.id + 1);
-    film.userDetails.watchlist = true;
-    this.#filmPresenter.init(updatedItem, this.#filmListContainer);
-    return !!film.userDetails.watchlist;
+    this.#filmsList = updateItem(this.#filmsList, film);
+    this.#filmPresenter.get(film.id).init(film, this.#filmListContainer);
   };
 
   #additionalFilmTops = (filmsList) => {
@@ -81,17 +95,10 @@ export default class FilmSectionPresenter {
     render(this.#mostCommentedFilms, this.#filmList.element, 'afterend');
     render(this.#topRatedFilms, this.#filmList.element, 'afterend');
 
-    for (let i = 0; i < 2; i++) {
-      this.#filmPresenter.init(mostCommentedFilms[i], this.#mostCommentedFilms.element.querySelector('.films-list__container'));
-      this.#filmPresenter.init(topRatedFilms[i], this.#topRatedFilms.element.querySelector('.films-list__container'));
-    }
-
-    this.#filmPresenter.init(mostCommentedFilms.slice(0, 2), this.#mostCommentedFilms.element.querySelector('.films-list__container'));
-    this.#filmPresenter.init(topRatedFilms.slice(0, 2), this.#topRatedFilms.element.querySelector('.films-list__container'));
   };
 
   #handleShowMoreButtonClick = () => {
-    this.#filmPresenter.init(this.#filmsList.slice(this.#renderedFilmCount, (this.#renderedFilmCount + this.#FILM_COUNT_PER_STEP)), this.#filmListContainer);
+    this.#renderFilms(this.#renderedFilmCount, this.#renderedFilmCount + this.#FILM_COUNT_PER_STEP, this.#filmsList, this.#filmListContainer );
 
     this.#renderedFilmCount += this.#FILM_COUNT_PER_STEP;
 
