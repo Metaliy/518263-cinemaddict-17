@@ -9,6 +9,7 @@ import EmptyFilmListView from '../view/film-list-empry-title';
 import SortView from '../view/sort-view';
 import FilmPresenter from './film-presenter';
 import { updateItem } from '../util';
+import { FILM_COUNT_PER_STEP, ADDITIONAL_FILM_COUNT } from '../const';
 
 export default class FilmSectionPresenter {
 
@@ -18,14 +19,15 @@ export default class FilmSectionPresenter {
   #showMoreFilmComponent = new ShowMoreButtonView();
   #topRatedFilms = new FilmsTopRatedView();
   #mostCommentedFilms = new FilmsMostCommentedView();
+  #sortComponent = new SortView();
   #mainBlock = null;
   #filmsModel = null;
   #filmsList = null;
   #commentList = null;
   #filmPresenter = new Map();
   #renderedFilmCount = null;
-  #FILM_COUNT_PER_STEP = 5;
-  #ADDITIONAL_FILM_COUNT = 2;
+  #FILM_COUNT_PER_STEP = FILM_COUNT_PER_STEP;
+  #ADDITIONAL_FILM_COUNT = ADDITIONAL_FILM_COUNT;
 
 
   init = (mainBlock, filmsModel) => {
@@ -37,8 +39,8 @@ export default class FilmSectionPresenter {
     this.#renderedFilmCount = this.#FILM_COUNT_PER_STEP;
 
 
-    render(new MainNavView(this.#filmsList), mainBlock);
-    render(new SortView(), mainBlock);
+    render(new MainNavView(this.#filmsList), this.#mainBlock);
+    this.#renderSort();
 
     render(this.#filmContainer, this.#mainBlock);
     render(this.#filmList, this.#filmContainer.element);
@@ -58,9 +60,18 @@ export default class FilmSectionPresenter {
 
   };
 
+  #renderSort = () => {
+    render(this.#sortComponent, this.#mainBlock);
+    // this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  };
+
+  // #handleSortTypeChange = (sortType) => {
+
+  // };
+
   #renderFilm = (film, container) => {
-    const filmPresenter = new FilmPresenter(this.#commentList, this.#changeData);
-    filmPresenter.init(film, container);
+    const filmPresenter = new FilmPresenter(this.#commentList, this.#changeData, container);
+    filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   };
 
@@ -94,6 +105,10 @@ export default class FilmSectionPresenter {
 
     render(this.#mostCommentedFilms, this.#filmList.element, 'afterend');
     render(this.#topRatedFilms, this.#filmList.element, 'afterend');
+
+    this.#renderFilms(0, this.#ADDITIONAL_FILM_COUNT, mostCommentedFilms, this.#mostCommentedFilms.element.querySelector('.films-list__container'));
+    this.#renderFilms(0, this.#ADDITIONAL_FILM_COUNT, topRatedFilms, this.#topRatedFilms.element.querySelector('.films-list__container'));
+
 
   };
 

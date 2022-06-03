@@ -19,13 +19,15 @@ export default class FilmPresenter {
   #filmCardComponent;
   #popupComponent;
   #filmItem;
+  #containerBlock;
 
-  constructor(commentList, changeData) {
+  constructor(commentList, changeData, containerBlock) {
     this.#commentList = commentList;
     this.#changeData = changeData;
+    this.#containerBlock = containerBlock;
   }
 
-  init = (film, containerBlock) => {
+  init = (film) => {
 
     this.#filmItem = film;
 
@@ -33,28 +35,31 @@ export default class FilmPresenter {
 
     this.#filmCardComponent = new FilmsCardView(film);
 
-    this.#filmCardComponent.setFilmClickHandler(this.#renderPopup);
+    this.#filmCardComponent.setFilmClickHandler(this.#onCardClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleWatchListClick);
     this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
     this.#filmCardComponent.setFavoriteClickHandler(this.#handleFavoriteWatchedClick);
 
     if(!prevFilmCardComponent) {
-      render(this.#filmCardComponent, containerBlock);
+      render(this.#filmCardComponent, this.#containerBlock);
       return;
     }
 
-    if(containerBlock.contains(prevFilmCardComponent.element)) {
+    if(this.#containerBlock.contains(prevFilmCardComponent.element)) {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
     remove(prevFilmCardComponent);
 
   };
 
-  #renderPopup = () => {
-
+  #onCardClick = () => {
     if(document.querySelector('.film-details')) {
       document.querySelector('.film-details').remove();
     }
+    this.#renderPopup();
+  };
+
+  #renderPopup = () => {
 
     document.body.classList.add('hide-overflow');
 
