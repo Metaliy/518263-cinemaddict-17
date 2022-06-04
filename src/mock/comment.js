@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayElement } from '../util';
+import { getRandomInteger, getRandomArrayElement, generateDate } from '../util';
 
 
 const AUTHORS = [
@@ -30,7 +30,7 @@ export const generateComment = () => ({
   id: getRandomInteger(0, 11),
   author: getRandomArrayElement(AUTHORS),
   comment: getRandomArrayElement(TEXTS),
-  date: '2019-05-11T16:12:32.554Z',
+  date: generateDate(),
   emotion: getRandomArrayElement(EMOJIS)
 }
 );

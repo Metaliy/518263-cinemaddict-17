@@ -23,4 +23,32 @@ const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length 
 
 const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
 
-export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, isEscKeyPressed, updateItem};
+const generateDate = () => {
+  const daysGap = getRandomInteger(-1, -10000);
+
+  return dayjs().add(daysGap, 'day').toDate();
+};
+
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortFilm = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
+
+  return weight ?? dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
+};
+
+export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, isEscKeyPressed, updateItem, generateDate, sortFilm};

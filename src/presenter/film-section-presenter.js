@@ -8,8 +8,8 @@ import FilmsMostCommentedView from '../view/films-most-commented-view';
 import EmptyFilmListView from '../view/film-list-empry-title';
 import SortView from '../view/sort-view';
 import FilmPresenter from './film-presenter';
-import { updateItem } from '../util';
-import { FILM_COUNT_PER_STEP, ADDITIONAL_FILM_COUNT } from '../const';
+import { updateItem, sortFilm } from '../util';
+import { FILM_COUNT_PER_STEP, ADDITIONAL_FILM_COUNT, SortType } from '../const';
 
 export default class FilmSectionPresenter {
 
@@ -28,16 +28,20 @@ export default class FilmSectionPresenter {
   #renderedFilmCount = null;
   #FILM_COUNT_PER_STEP = FILM_COUNT_PER_STEP;
   #ADDITIONAL_FILM_COUNT = ADDITIONAL_FILM_COUNT;
+  #currentSortType = SortType.DEFAULT;
+  #sourcedFilmSection = [];
+
+  constructor(filmSectionContainer, filmModel) {
+    this.#mainBlock = filmSectionContainer;
+    this.#filmsModel = filmModel;
+  }
 
 
-  init = (mainBlock, filmsModel) => {
-
-    this.#mainBlock = mainBlock;
-    this.#filmsModel = filmsModel;
+  init = () => {
     this.#filmsList = this.#filmsModel.films;
     this.#commentList = this.#filmsModel.comments;
     this.#renderedFilmCount = this.#FILM_COUNT_PER_STEP;
-
+    this.#sourcedFilmSection = this.#filmsList.slice();
 
     render(new MainNavView(this.#filmsList), this.#mainBlock);
     this.#renderSort();
@@ -62,12 +66,32 @@ export default class FilmSectionPresenter {
 
   #renderSort = () => {
     render(this.#sortComponent, this.#mainBlock);
-    // this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
-  // #handleSortTypeChange = (sortType) => {
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortFilms(sortType);
+    this.#clearTaskList();
+    this.#renderFilmList();
+  };
 
-  // };
+  #sortFilms = (sortType) => {
+    switch (sortType) {
+      case SortType.DATE:
+        this.#filmsList.sort(sortFilm);
+        break;
+      case SortType.RATING:
+        this.#filmsList.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+        break;
+      default:
+        this.#filmsList = [...this.#sourcedFilmSection];
+    }
+
+    this.#currentSortType = sortType;
+  };
 
   #renderFilm = (film, container) => {
     const filmPresenter = new FilmPresenter(this.#commentList, this.#changeData, container);
@@ -93,12 +117,12 @@ export default class FilmSectionPresenter {
 
   #changeData = (film) => {
     this.#filmsList = updateItem(this.#filmsList, film);
-    this.#filmPresenter.get(film.id).init(film, this.#filmListContainer);
+    this.#filmPresenter.get(film.id).init(film);
   };
 
   #additionalFilmTops = (filmsList) => {
-    const mostCommentedFilms = filmsList.slice();
-    const topRatedFilms = filmsList.slice();
+    const mostCommentedFilms = filmsList;
+    const topRatedFilms = filmsList;
 
     mostCommentedFilms.sort((a, b) => b.filmInfo.commentCount - a.filmInfo.commentCount);
     topRatedFilms.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
@@ -106,10 +130,18 @@ export default class FilmSectionPresenter {
     render(this.#mostCommentedFilms, this.#filmList.element, 'afterend');
     render(this.#topRatedFilms, this.#filmList.element, 'afterend');
 
+
     this.#renderFilms(0, this.#ADDITIONAL_FILM_COUNT, mostCommentedFilms, this.#mostCommentedFilms.element.querySelector('.films-list__container'));
     this.#renderFilms(0, this.#ADDITIONAL_FILM_COUNT, topRatedFilms, this.#topRatedFilms.element.querySelector('.films-list__container'));
 
 
+  };
+
+  #clearTaskList = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this.#showMoreFilmComponent);
   };
 
   #handleShowMoreButtonClick = () => {

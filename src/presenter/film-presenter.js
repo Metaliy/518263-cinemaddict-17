@@ -52,6 +52,14 @@ export default class FilmPresenter {
 
   };
 
+  destroy = () => {
+    remove(this.#filmCardComponent);
+  };
+
+  copyItem = (anoyherTops) => {
+    render(this.#filmCardComponent, anoyherTops);
+  };
+
   #onCardClick = () => {
     if(document.querySelector('.film-details')) {
       document.querySelector('.film-details').remove();
