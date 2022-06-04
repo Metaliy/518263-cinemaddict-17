@@ -1,12 +1,16 @@
 import AbstractView from '../framework/view/abstract-view';
 import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
+
 const createPopupFilmDetailsTemplate = (film) => {
   const {title, alternativeTitle, totalRating, poster, description, director, writers, actors, release, runtime, genre} = film.filmInfo;
+  const {watchlist, alreadyWatched, favorite} = film.userDetails;
 
   const releaseDate = release.date !== null
     ? humanizeReleaseDate(release.date, 'D MMMM YYYY')
     : '';
+
+  const checkFilmControlsCondition = (controlType) => controlType ? 'film-details__control-button--active' : '';
 
   return (
     `<section class="film-details">
@@ -73,9 +77,9 @@ const createPopupFilmDetailsTemplate = (film) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${checkFilmControlsCondition(watchlist)}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${checkFilmControlsCondition(alreadyWatched)}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${checkFilmControlsCondition(favorite)}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -141,6 +145,39 @@ export default class PopupFilmDetailsView extends AbstractView {
   #CloseButtonClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
+  };
+
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistkHandler);
+  };
+
+  #watchlistkHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+    this.element.querySelector('.film-details__control-button--watchlist').classList.toggle('film-details__control-button--active');
+  };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatched = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#alreadyWatchedkHandler);
+  };
+
+  #alreadyWatchedkHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.alreadyWatched();
+    this.element.querySelector('.film-details__control-button--watched').classList.toggle('film-details__control-button--active');
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favorite = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoritekHandler);
+  };
+
+  #favoritekHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favorite();
+    this.element.querySelector('.film-details__control-button--favorite').classList.toggle('film-details__control-button--active');
   };
 
 

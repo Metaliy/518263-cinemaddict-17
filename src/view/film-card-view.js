@@ -3,12 +3,13 @@ import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
 
 const createFilmCardTemplate = (film) => {
-  const {title, totalRating, poster, description, release, runtime, genre} = film.filmInfo;
+  const {title, totalRating, poster, description, release, runtime, genre, commentCount} = film.filmInfo;
+  const {watchlist, alreadyWatched, favorite} = film.userDetails;
 
   const releaseYear = release.date !== null
     ? humanizeReleaseDate(release.date, 'YYYY')
     : '';
-
+  const checkFilmControlsCondition = (controlType) => controlType ? 'film-card__controls-item--active' : '';
 
   return (
     `<article class="film-card">
@@ -22,12 +23,12 @@ const createFilmCardTemplate = (film) => {
     </p>
     <img src="./images/posters/${poster}" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <span class="film-card__comments">5 comments</span>
+    <span class="film-card__comments">${commentCount} comments</span>
   </a>
   <div class="film-card__controls">
-    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-    <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-    <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${checkFilmControlsCondition(watchlist)}" type="button">Add to watchlist</button>
+    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${checkFilmControlsCondition(alreadyWatched)}" type="button">Mark as watched</button>
+    <button class="film-card__controls-item film-card__controls-item--favorite ${checkFilmControlsCondition(favorite)}" type="button">Mark as favorite</button>
   </div>
 </article>`);
 
@@ -46,12 +47,42 @@ export default class FilmCardView extends AbstractView {
 
   setFilmClickHandler = (callback) => {
     this._callback.click = callback;
-    this.element.querySelector('.film-card__link').addEventListener('click', this.#FilmclickHandler);
+    this.element.querySelector('.film-card__link').addEventListener('click', this.#filmclickHandler);
   };
 
-  #FilmclickHandler = (evt) => {
+  #filmclickHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
+  };
+
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchlistkHandler);
+  };
+
+  #watchlistkHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  };
+
+  setAlreadyWatchedClickHandler = (callback) => {
+    this._callback.alreadyWatched = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#alreadyWatchedkHandler);
+  };
+
+  #alreadyWatchedkHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.alreadyWatched();
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favorite = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoritekHandler);
+  };
+
+  #favoritekHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favorite();
   };
 
 }
