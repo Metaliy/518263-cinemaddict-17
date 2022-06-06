@@ -20,11 +20,13 @@ export default class FilmPresenter {
   #popupComponent;
   #filmItem;
   #containerBlock;
+  #updateMainNav;
 
-  constructor(commentList, changeData, containerBlock) {
+  constructor(commentList, changeData, containerBlock, updateMainNav) {
     this.#commentList = commentList;
     this.#changeData = changeData;
     this.#containerBlock = containerBlock;
+    this.#updateMainNav = updateMainNav;
   }
 
   init = (film) => {
@@ -105,14 +107,17 @@ export default class FilmPresenter {
 
   #handleWatchListClick  = () => {
     this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, watchlist: !this.#filmItem.userDetails.watchlist}});
+    this.#updateMainNav();
   };
 
   #handleAlreadyWatchedClick = () => {
     this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, alreadyWatched: !this.#filmItem.userDetails.alreadyWatched}});
+    this.#updateMainNav();
   };
 
   #handleFavoriteWatchedClick = () => {
     this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, favorite: !this.#filmItem.userDetails.favorite}});
+    this.#updateMainNav();
   };
 
 }
