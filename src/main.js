@@ -8,7 +8,7 @@ const filmModel = new FilmModel();
 const mainBlock = document.querySelector('.main');
 const header = document.querySelector('.header');
 
-const filmSectionPresenter = new FilmSectionPresenter();
+const filmSectionPresenter = new FilmSectionPresenter(mainBlock, filmModel);
 
 
 render(new UserRaitingView(), header);

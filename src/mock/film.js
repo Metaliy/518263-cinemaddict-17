@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../util';
+import { getRandomInteger, generateDate } from '../util';
 
 
 const generateDescription = () => {
@@ -47,7 +47,7 @@ export const generateFilm = () => ({
       'Morgan Freeman'
     ],
     release: {
-      date: '2019-05-11T00:00:00.000Z',
+      date: generateDate(),
       releaseCountry: 'Finland'
     },
     runtime: 77,
