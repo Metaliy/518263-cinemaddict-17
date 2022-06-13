@@ -79,9 +79,6 @@ export default class FilmSectionPresenter {
   };
 
   #handleSortTypeChange = (sortType) => {
-    if (this.#currentSortType === sortType) {
-      return;
-    }
     this.#sortFilms(sortType);
     this.#clearTaskList();
     this.#renderFilmList();
@@ -126,16 +123,16 @@ export default class FilmSectionPresenter {
 
   #changeData = (film) => {
     this.#filmsList = updateItem(this.#filmsList, film);
-
-
-    try {
+    if (this.#topRatedFilmPresenter.get(film.id)) {
       this.#topRatedFilmPresenter.get(film.id).init(film);
-    } finally {
-      try {
-        this.#mostCommentedFilmPresenter.get(film.id).init(film);
-      }finally {
-        this.#filmPresenter.get(film.id).init(film);
-      }
+    }
+
+    if (this.#mostCommentedFilmPresenter.get(film.id)) {
+      this.#mostCommentedFilmPresenter.get(film.id).init(film);
+    }
+
+    if (this.#filmPresenter.get(film.id)) {
+      this.#filmPresenter.get(film.id).init(film);
     }
   };
 
