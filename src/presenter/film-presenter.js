@@ -1,7 +1,6 @@
 
 import FilmsCardView from '../view/film-card-view';
 import PopupFilmDetailsView from '../view/popup-film-details-view';
-import FilmsPopupCommentView from '../view/film-popup-comment-view';
 import {render, remove, replace} from '../framework/render';
 import {isEscKeyPressed} from '../util';
 
