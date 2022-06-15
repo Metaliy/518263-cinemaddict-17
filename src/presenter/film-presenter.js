@@ -14,7 +14,7 @@ const getIdFilteredArray = (filmiD, commentsArray) => {
 export default class FilmPresenter {
 
   #commentList;
-  #filteredArray;
+  filteredArray;
   #changeData;
   #filmCardComponent;
   #popupComponent;
@@ -72,8 +72,8 @@ export default class FilmPresenter {
   #renderPopup = () => {
 
     document.body.classList.add('hide-overflow');
-
-    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem);
+    const filteredArray = getIdFilteredArray(this.#filmItem.id, this.#commentList);
+    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, filteredArray);
     this.#popupComponent.setWatchlistClickHandler(this.#handleControlClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleControlClick);
     this.#popupComponent.setFavoriteClickHandler(this.#handleControlClick);
@@ -88,22 +88,17 @@ export default class FilmPresenter {
       }
     };
 
+
     const onCloseButtonClick = () => {
       remove(this.#popupComponent);
       document.body.classList.remove('hide-overflow');
       document.removeEventListener('keydown', onEscKeyDown);
     };
 
-    this.#filteredArray = getIdFilteredArray(this.#filmItem.id, this.#commentList);
-
-    for (let i = 0; i < this.#filteredArray.length; i++) {
-      render( new FilmsPopupCommentView (this.#filteredArray[i]), this.#popupComponent.element.querySelector('.film-details__comments-list'));
-    }
 
     this.#popupComponent.setCloseButtonClickHandler(onCloseButtonClick);
     document.addEventListener('keydown', onEscKeyDown);
   };
-
 
   #handleControlClick = (controlName) => {
     this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
