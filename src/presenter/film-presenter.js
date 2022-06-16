@@ -99,9 +99,17 @@ export default class FilmPresenter {
     document.addEventListener('keydown', onEscKeyDown);
   };
 
+  #rerenderPopup = () => {
+    const popupScroll = this.#popupComponent.element.scrollTop;
+    remove(this.#popupComponent);
+    this.#renderPopup();
+    this.#popupComponent.element.scrollTo(0, popupScroll);
+  };
+
   #handleControlClick = (controlName) => {
     this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
     this.#updateMainNav();
+    this.#rerenderPopup();
   };
 
 }
