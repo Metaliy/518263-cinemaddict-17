@@ -43,6 +43,7 @@ export default class FilmSectionPresenter {
 
   get films() {
 
+
     const filterType = this.#filterModel.filter;
     const films = this.#filmsModel.films;
     let filteredFilms = filter[filterType](films);
