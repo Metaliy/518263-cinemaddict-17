@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FilterType } from './const';
 
 
 const getRandomInteger = (a = 0, b = 1) => {
@@ -51,4 +52,11 @@ const sortFilm = (filmA, filmB) => {
   return weight ?? dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
 };
 
-export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, isEscKeyPressed, updateItem, generateDate, sortFilm};
+const filter = {
+  [FilterType.ALL]: (arr) => arr,
+  [FilterType.WATCH_LIST]: (arr) => arr.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (arr) => arr.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (arr) => arr.filter((film) => film.userDetails.favorite),
+};
+
+export {getRandomInteger, humanizeReleaseDate, getRuntimeFromMins, getRandomArrayElement, isEscKeyPressed, updateItem, generateDate, sortFilm, filter};

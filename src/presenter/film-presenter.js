@@ -3,29 +3,29 @@ import FilmsCardView from '../view/film-card-view';
 import PopupFilmDetailsView from '../view/popup-film-details-view';
 import {render, remove, replace} from '../framework/render';
 import {isEscKeyPressed} from '../util';
-
-const getIdFilteredArray = (filmiD, commentsArray) => {
-  const fillteredArray = commentsArray.filter((item) => item.id === filmiD);
-  return fillteredArray;
-};
+import { UserAction, UpdateType } from '../const';
 
 
 export default class FilmPresenter {
 
-  #commentList;
+  #commentModel;
   filteredArray;
   #changeData;
   #filmCardComponent;
   #popupComponent;
   #filmItem;
   #containerBlock;
-  #updateMainNav;
 
-  constructor(commentList, changeData, containerBlock, updateMainNav) {
-    this.#commentList = commentList;
+  #changeMode;
+  #filmModel;
+
+  constructor(commentModel, filmModel, containerBlock, changeData, changeMode) {
+    this.#commentModel = commentModel;
+    this.#filmModel = filmModel;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
     this.#containerBlock = containerBlock;
-    this.#updateMainNav = updateMainNav;
+
   }
 
   init = (film) => {
@@ -71,11 +71,11 @@ export default class FilmPresenter {
   #renderPopup = () => {
 
     document.body.classList.add('hide-overflow');
-    const filteredArray = getIdFilteredArray(this.#filmItem.id, this.#commentList);
-    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, filteredArray);
+    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, this.#commentModel);
     this.#popupComponent.setWatchlistClickHandler(this.#handleControlClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleControlClick);
     this.#popupComponent.setFavoriteClickHandler(this.#handleControlClick);
+    this.#popupComponent.setCommentDeleteClickHandler(this.#handleCommentDeleteClick);
 
     render(this.#popupComponent, document.querySelector('body'));
 
@@ -107,9 +107,17 @@ export default class FilmPresenter {
   };
 
   #handleControlClick = (controlName) => {
-    this.#changeData({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
-    this.#updateMainNav();
-    this.#rerenderPopup();
+    this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
+    if(this.#popupComponent) {
+      this.#rerenderPopup();
+    }
   };
 
+  #handleCommentDeleteClick = (commentId) => {
+    this.#commentModel.deleteComment(
+      UpdateType.MINOR,
+      commentId
+    );
+
+  };
 }

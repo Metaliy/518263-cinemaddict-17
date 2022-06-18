@@ -137,16 +137,17 @@ const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
 
 export default class PopupFilmDetailsView extends AbstractStatefulView {
 
+  #filteredCommentsArray;
 
-  constructor(film, filteredCommentsArray) {
+  constructor(film, commentsModel) {
     super();
-    this.filteredCommentsArray = filteredCommentsArray;
+    this.#filteredCommentsArray = commentsModel.filter((item) => item.id === film.id);
     this._state = PopupFilmDetailsView.parseFilmToState(film);
     this.#setInnerHandlers();
   }
 
   get template() {
-    return createPopupFilmDetailsTemplate(this._state, this.filteredCommentsArray);
+    return createPopupFilmDetailsTemplate(this._state, this.#filteredCommentsArray);
   }
 
   static parseFilmToState = (film) => ({...film, newCommentEmoji: '' });
@@ -229,6 +230,16 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
   setFavoriteClickHandler = (callback) => {
     this._callback.favorite = callback;
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', (evt) => this.#filmControlClickHandler(evt, callback, 'callback'));
+  };
+
+  setCommentDeleteClickHandler = (callback) => {
+    this._callback.commentDeleteClick = callback;
+    this.element.querySelectorAll('.film-details__comment-delete').forEach((element) => element.addEventListener('click', this.#commentDeleteClickHandler));
+  };
+
+  #commentDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.commentDeleteClick(evt.target);
   };
 
 

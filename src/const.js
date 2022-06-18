@@ -30,7 +30,26 @@ const EMOJIS = [
   'angry',
 ];
 
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const FilterType = {
+  ALL: 'all',
+  WATCH_LIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+};
+
 const FILM_COUNT_PER_STEP = 5;
 const ADDITIONAL_FILM_COUNT = 2;
 
-export {SortType, FILM_COUNT_PER_STEP, ADDITIONAL_FILM_COUNT, AUTHORS, TEXTS, EMOJIS};
+export {SortType, FILM_COUNT_PER_STEP, ADDITIONAL_FILM_COUNT, AUTHORS, TEXTS, EMOJIS, UserAction, UpdateType, FilterType};
