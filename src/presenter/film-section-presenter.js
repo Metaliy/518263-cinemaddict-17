@@ -127,10 +127,10 @@ export default class FilmSectionPresenter {
     this.#renderMainSection();
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#filmsModel.updateFilm(updateType, update);
+        await this.#filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
         this.#filmsModel.updateFilm(updateType, update);

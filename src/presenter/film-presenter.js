@@ -32,7 +32,6 @@ export default class FilmPresenter {
     const prevFilmCardComponent = this.#filmCardComponent;
 
     this.#filmCardComponent = new FilmsCardView(film);
-
     this.#filmCardComponent.setFilmClickHandler(this.#onCardClick);
     this.#filmCardComponent.setWatchlistClickHandler(this.#handleControlClick);
     this.#filmCardComponent.setAlreadyWatchedClickHandler(this.#handleControlClick);
@@ -62,18 +61,18 @@ export default class FilmPresenter {
     if(document.querySelector('.film-details')) {
       document.querySelector('.film-details').remove();
     }
-    this.#getComments();
+    this.#renderPopup(this.#filmItem);
   };
 
-  #getComments = async () => {
+  #renderPopup = async (film) => {
     const comments = await this.#commentModel.getCommentsById(this.#filmItem.id);
-    this.#renderPopup(comments);
+    this.#createPopup(film, comments);
   };
 
-  #renderPopup = (comments) => {
+  #createPopup = (film, comments) => {
 
     document.body.classList.add('hide-overflow');
-    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, comments);
+    this.#popupComponent = new PopupFilmDetailsView(film, comments);
     this.#popupComponent.setWatchlistClickHandler(this.#handleControlClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleControlClick);
     this.#popupComponent.setFavoriteClickHandler(this.#handleControlClick);
@@ -101,17 +100,17 @@ export default class FilmPresenter {
     document.addEventListener('keydown', onEscKeyDown);
   };
 
-  #rerenderPopup = () => {
+  #rerenderPopup = (film) => {
     const popupScroll = this.#popupComponent.element.scrollTop;
     remove(this.#popupComponent);
-    this.#renderPopup();
+    this.#renderPopup(film);
     this.#popupComponent.element.scrollTo(0, popupScroll);
   };
 
-  #handleControlClick = (controlName) => {
-    this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
+  #handleControlClick = async (controlName) => {
+    await this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
     if(this.#popupComponent) {
-      this.#rerenderPopup();
+      this.#rerenderPopup(this.#filmItem);
     }
   };
 
