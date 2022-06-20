@@ -27,7 +27,7 @@ const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
           <p class="film-details__age">18+</p>
         </div>
@@ -72,7 +72,7 @@ const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
             <tr class="film-details__row">
               <td class="film-details__term">Genre</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">${genre}</span>
+                <span class="film-details__genre">${genre.join(' ')}</span>
             </tr>
           </table>
 
@@ -141,7 +141,7 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
 
   constructor(film, commentsModel) {
     super();
-    this.#filteredCommentsArray = commentsModel.filter((item) => item.id === film.id);
+    this.#filteredCommentsArray = commentsModel;
     this._state = PopupFilmDetailsView.parseFilmToState(film);
     this.#setInnerHandlers();
   }

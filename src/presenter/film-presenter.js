@@ -15,13 +15,11 @@ export default class FilmPresenter {
   #popupComponent;
   #filmItem;
   #containerBlock;
-
   #changeMode;
-  #filmModel;
+  #comments;
 
-  constructor(commentModel, filmModel, containerBlock, changeData, changeMode) {
+  constructor(commentModel, containerBlock, changeData, changeMode) {
     this.#commentModel = commentModel;
-    this.#filmModel = filmModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
     this.#containerBlock = containerBlock;
@@ -29,7 +27,6 @@ export default class FilmPresenter {
   }
 
   init = (film) => {
-
     this.#filmItem = film;
 
     const prevFilmCardComponent = this.#filmCardComponent;
@@ -65,13 +62,18 @@ export default class FilmPresenter {
     if(document.querySelector('.film-details')) {
       document.querySelector('.film-details').remove();
     }
-    this.#renderPopup();
+    this.#getComments();
   };
 
-  #renderPopup = () => {
+  #getComments = async () => {
+    const comments = await this.#commentModel.getCommentsById(this.#filmItem.id);
+    this.#renderPopup(comments);
+  };
+
+  #renderPopup = (comments) => {
 
     document.body.classList.add('hide-overflow');
-    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, this.#commentModel);
+    this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, comments);
     this.#popupComponent.setWatchlistClickHandler(this.#handleControlClick);
     this.#popupComponent.setAlreadyWatchedClickHandler(this.#handleControlClick);
     this.#popupComponent.setFavoriteClickHandler(this.#handleControlClick);

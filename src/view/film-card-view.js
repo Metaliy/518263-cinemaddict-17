@@ -3,7 +3,7 @@ import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
 
 const createFilmCardTemplate = (film) => {
-  const {title, totalRating, poster, description, release, runtime, genre, commentCount} = film.filmInfo;
+  const {title, totalRating, poster, description, release, runtime, genre} = film.filmInfo;
   const {watchlist, alreadyWatched, favorite} = film.userDetails;
 
   const releaseYear = release.date !== null
@@ -19,11 +19,11 @@ const createFilmCardTemplate = (film) => {
     <p class="film-card__info">
       <span class="film-card__year">${releaseYear}</span>
       <span class="film-card__duration">${getRuntimeFromMins(runtime)}</span>
-      <span class="film-card__genre">${genre}</span>
+      <span class="film-card__genre">${genre[0]}</span>
     </p>
-    <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+    <img src="${poster}" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <span class="film-card__comments">${commentCount} comments</span>
+    <span class="film-card__comments">${film.comments.length} comments</span>
   </a>
   <div class="film-card__controls">
     <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${checkFilmControlsCondition(watchlist)}" type="button">Add to watchlist</button>
