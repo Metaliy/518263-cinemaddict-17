@@ -168,7 +168,7 @@ export default class FilmSectionPresenter {
         this.#renderMainSection();
         break;
       case UpdateType.INIT:
-        this.#clearFilmList();
+        this.#clearSection();
         this.#renderMainSection();
         break;
     }
@@ -196,13 +196,6 @@ export default class FilmSectionPresenter {
 
   };
 
-
-  #clearFilmList = () => {
-    this.#filmPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmPresenter.clear();
-    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
-    remove(this.#showMoreFilmComponent);
-  };
 
   #handleShowMoreButtonClick = () => {
     const filmCount = this.films.length;

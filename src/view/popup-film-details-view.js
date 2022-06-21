@@ -3,10 +3,10 @@ import FilmsPopupCommentView from './film-popup-comment-view';
 import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
 
-const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
+const createPopupFilmDetailsTemplate = (film, filteredCommentsArray, filmOriginal) => {
   const {newCommentEmoji} = film;
   const {title, alternativeTitle, totalRating, poster, description, director, writers, actors, release, runtime, genre} = film.filmInfo;
-  const {watchlist, alreadyWatched, favorite} = film.userDetails;
+  const {watchlist, alreadyWatched, favorite} = filmOriginal.userDetails;
 
   const releaseDate = release.date !== null
     ? humanizeReleaseDate(release.date, 'D MMMM YYYY')
