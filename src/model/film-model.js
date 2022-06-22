@@ -50,10 +50,31 @@ export default class FilmModel extends Observable {
     return this.#mostCommentedFilms;
   }
 
-  updateFilm = (updateType, update) => {
+  updateFilm = async (updateType, update) => {
+    const index = this.#checkFilmExisting(update);
+
+    const response = await this.#apiService.updateFilm(update);
+    const updatedFilm = this.#adaptToClient(response);
+    this.#setLocalFilmAndNotify(index, updateType, updatedFilm);
+
+  };
+
+  updateLocalFilm = async (updateType, update) => {
+    const index = this.#checkFilmExisting(update);
+    this.#setLocalFilmAndNotify(index, updateType, update);
+  };
+
+  #checkFilmExisting = (update) => {
     const index = this.#films.findIndex((film) => film.id === update.id);
     if (index === -1) {
-      throw new Error('Can\'t update unexisting task');
+      throw new Error('Film not found');
+    }
+    return index;
+  };
+
+  #setLocalFilmAndNotify = (index, updateType, update) => {
+    if (update.user_details) {
+      update = this.#adaptToClient(update);
     }
 
     this.#films = [

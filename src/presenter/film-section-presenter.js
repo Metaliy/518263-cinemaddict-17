@@ -1,4 +1,5 @@
 import {render, remove} from '../framework/render';
+
 import ShowMoreButtonView from '../view/show-more-button-view';
 import FilmsView from '../view/films-view';
 import FilmsListView from '../view/film-list-view';
@@ -19,11 +20,11 @@ export default class FilmSectionPresenter {
   #topRatedFilms = new FilmsTopRatedView();
   #mostCommentedFilms = new FilmsMostCommentedView();
   #sortComponent = new SortView();
+  #userRaitingComponent = null;
   #emptyFilmsComponent = null;
   #mainBlock = null;
   #filmsModel = null;
   #commentModel = null;
-  #commentList = null;
   #filterModel;
   #filmPresenter = new Map();
   #topRatedFilmPresenter = new Map();
@@ -68,7 +69,6 @@ export default class FilmSectionPresenter {
 
   #renderMainSection = () => {
     this.#renderSort();
-
     render(this.#filmContainer, this.#mainBlock);
     render(this.#filmList, this.#filmContainer.element);
 
@@ -87,14 +87,13 @@ export default class FilmSectionPresenter {
       this.#showMoreFilmComponent.setClickHandler(this.#handleShowMoreButtonClick);
     }
 
-  //  this.#additionalFilmTops(this.films);
   };
 
   #clearSection = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-
+    remove(this.#userRaitingComponent);
     remove(this.#sortComponent);
     remove(this.#showMoreFilmComponent);
 
@@ -133,10 +132,10 @@ export default class FilmSectionPresenter {
         await this.#filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this.#filmsModel.updateFilm(updateType, update);
+        await this.#filmsModel.updateLocalFilm(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentModel.deleteComment(updateType, update);
+        await this.#filmsModel.updateLocalFilm(updateType, update);
         break;
     }
 
@@ -161,7 +160,6 @@ export default class FilmSectionPresenter {
       case UpdateType.MINOR:
         this.#clearSection();
         this.#renderMainSection();
-
         break;
       case UpdateType.MAJOR:
         this.#clearSection({resetRenderedFilmCount: true, resetSortType: true});
@@ -175,7 +173,7 @@ export default class FilmSectionPresenter {
 
   };
 
-  #renderFilm = (film, container, map) => {
+  #renderFilm =  (film, container, map) => {
     const filmPresenter = new FilmPresenter(this.#commentModel, container, this.#handleViewAction, this.#handleModelEvent);
     filmPresenter.init(film);
     map.set(film.id, filmPresenter);

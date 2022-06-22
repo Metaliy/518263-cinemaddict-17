@@ -3,13 +3,13 @@ import { humanizeReleaseDate } from '../util';
 
 
 const createFilmPopupComment = (commentArrayItem) => {
-  const {comment, author, emotion, date} = commentArrayItem;
+  const {comment, author, emotion, date, id} = commentArrayItem;
 
   const commentDate = date !== null
     ? humanizeReleaseDate(date, 'YYYY/M/D H:m')
     : '';
 
-  return `<li class="film-details__comment">
+  return `<li class="film-details__comment" id="${id}">
   <span class="film-details__comment-emoji">
     <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
   </span>

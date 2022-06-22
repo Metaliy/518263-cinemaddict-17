@@ -26,4 +26,15 @@ export default class CommentModel extends Observable {
     return this.#comments;
   }
 
+  addComment = async (filmId, update) => {
+    const updatedData = await this.#apiService.addComment(filmId, update);
+    this.#comments = updatedData.comments;
+    return updatedData.film;
+  };
+
+  deleteComment = async (id) => {
+    await this.#apiService.deleteComment(id);
+    this.#comments = this.#comments.filter((comment) => comment.id !== id);
+  };
+
 }

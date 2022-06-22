@@ -3,10 +3,10 @@ import FilmsPopupCommentView from './film-popup-comment-view';
 import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
 
-const createPopupFilmDetailsTemplate = (film, filteredCommentsArray, filmOriginal) => {
+const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
   const {newCommentEmoji} = film;
   const {title, alternativeTitle, totalRating, poster, description, director, writers, actors, release, runtime, genre} = film.filmInfo;
-  const {watchlist, alreadyWatched, favorite} = filmOriginal.userDetails;
+  const {watchlist, alreadyWatched, favorite} = film.userDetails;
 
   const releaseDate = release.date !== null
     ? humanizeReleaseDate(release.date, 'D MMMM YYYY')
@@ -199,6 +199,7 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
     this.setWatchlistClickHandler(this._callback.watchlistClick);
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatched);
     this.setFavoriteClickHandler(this._callback.favorite);
+    this.setCommentAddHandler(this._callback.commentAdd);
   };
 
 
@@ -215,6 +216,7 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
   #filmControlClickHandler = (evt, callback, controlName) => {
     evt.preventDefault();
     callback(controlName);
+    this.updateElement({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
   };
 
   setWatchlistClickHandler = (callback) => {
@@ -234,6 +236,24 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', (evt) => this.#filmControlClickHandler(evt, callback, 'favorite'));
   };
 
+  setCommentAddHandler = (callback) => {
+    this._callback.commentAdd = callback;
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#commentAddHandler);
+  };
+
+  #commentAddHandler = (evt) => {
+    if ((evt.ctrlKey || evt.metaKey) && evt.keyCode === 13) {
+      this.updateElement({
+        scrollTop: this.element.scrollTop,
+        isCommentAdding: true,
+      });
+      this._callback.commentAdd({
+        comment: evt.target.value,
+        emotion: this._state.newCommentEmoji
+      });
+    }
+  };
+
   setCommentDeleteClickHandler = (callback) => {
     this._callback.commentDeleteClick = callback;
     this.element.querySelectorAll('.film-details__comment-delete').forEach((element) => element.addEventListener('click', this.#commentDeleteClickHandler));
@@ -241,7 +261,7 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.commentDeleteClick(evt.target);
+    this._callback.commentDeleteClick(evt.target.parentNode.parentNode.parentNode.id);
   };
 
 
