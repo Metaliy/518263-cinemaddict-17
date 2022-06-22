@@ -70,7 +70,7 @@ const createPopupFilmDetailsTemplate = (film, filteredCommentsArray) => {
               <td class="film-details__cell">${release.releaseCountry}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genre</td>
+              <td class="film-details__term">${genre.lenght > 1 ? 'Genre' : 'Genres'}</td>
               <td class="film-details__cell">
                 <span class="film-details__genre">${genre.join(' ')}</span>
             </tr>
@@ -215,7 +215,7 @@ export default class PopupFilmDetailsView extends AbstractStatefulView {
 
   #filmControlClickHandler = (evt, callback, controlName) => {
     evt.preventDefault();
-    callback(controlName);
+    callback([controlName]);
     this.updateElement({...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
   };
 

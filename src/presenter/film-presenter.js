@@ -45,6 +45,9 @@ export default class FilmPresenter {
 
 
   #onCardClick = () => {
+    if(this.#popupComponent) {
+      remove(this.#popupComponent);
+    }
     this.#updatePopup();
   };
 
@@ -88,6 +91,9 @@ export default class FilmPresenter {
 
   #handleControlClick = async (controlName) => {
     await this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
+    if(this.#popupComponent) {
+      this.rerenderPopup();
+    }
   };
 
   rerenderPopup = () => {
@@ -100,10 +106,11 @@ export default class FilmPresenter {
   #handleAddComment = async (update) => {
     const commentedFilm = await this.#commentModel.addComment(this.#filmItem, update);
     this.#changeData(UserAction.ADD_COMMENT, UpdateType.MINOR, commentedFilm);
+    this.rerenderPopup();
   };
 
   #handleCommentDeleteClick = (commentId) => {
     this.#commentModel.deleteComment(commentId);
-
+    this.rerenderPopup();
   };
 }

@@ -17,8 +17,9 @@ const commentModel = new CommentModel(api);
 const filterModel = new FilterModel();
 const mainBlock = document.querySelector('.main');
 const headerElement = document.querySelector('.header');
+const footerStatisticElement = document.querySelector('.footer__statistics');
 
-const filmSectionPresenter = new FilmSectionPresenter(mainBlock, filmModel, commentModel, filterModel);
+const filmSectionPresenter = new FilmSectionPresenter(mainBlock, filmModel, commentModel, filterModel, footerStatisticElement);
 const filterPresenter = new FilterPresenter(mainBlock, filterModel, filmModel);
 const profileProsenter = new ProfilePresenter(headerElement, filmModel);
 

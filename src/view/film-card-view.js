@@ -1,6 +1,13 @@
 import AbstractView from '../framework/view/abstract-view';
 import { humanizeReleaseDate, getRuntimeFromMins } from '../util';
 
+const checkDescriptionMaxLength = (description) => {
+  let shortDescription = '';
+  if(description.length >= 140) {
+    shortDescription = description.slice(0, 139).concat('...');
+  }
+  return shortDescription;
+};
 
 const createFilmCardTemplate = (film) => {
   const {title, totalRating, poster, description, release, runtime, genre} = film.filmInfo;
@@ -22,7 +29,7 @@ const createFilmCardTemplate = (film) => {
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${description}</p>
+    <p class="film-card__description">${checkDescriptionMaxLength(description)}</p>
     <span class="film-card__comments">${film.comments.length} comments</span>
   </a>
   <div class="film-card__controls">
