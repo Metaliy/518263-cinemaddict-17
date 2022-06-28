@@ -16,6 +16,7 @@ export default class FilmPresenter {
   #containerBlock;
   #prevFilmCardComponent;
   #savePopup;
+  #changeModelData;
 
 
   constructor(
@@ -30,6 +31,7 @@ export default class FilmPresenter {
     this.#changeData = changeData;
     this.#containerBlock = containerBlock;
     this.#savePopup = savePopup;
+    this.#changeModelData = changeModelData;
 
     if (popupComponent) {
       this.#popupComponent = popupComponent;
@@ -38,10 +40,6 @@ export default class FilmPresenter {
   }
 
   init = (film) => {
-    // if (film.id === '0') {
-    //   console.log("FILM PRESENTER INIT")
-    //   console.log(film)
-    // }
     this.#filmItem = film;
     this.#prevFilmCardComponent = this.#filmCardComponent;
     this.#filmCardComponent = new FilmsCardView(this.#filmItem);
@@ -74,6 +72,7 @@ export default class FilmPresenter {
   #updatePopup = async () => {
     const commentsArray = await this.#commentModel.getCommentsById(this.#filmItem.id);
     this.#popupComponent = new PopupFilmDetailsView(this.#filmItem, commentsArray);
+    this.#savePopup(this.#popupComponent);
     document.addEventListener('keydown', this.#onEscKeyDown);
     this.#popupComponent.setCloseButtonClickHandler(this.#onCloseButtonClick);
     this.#replacePopup(commentsArray);
@@ -110,13 +109,13 @@ export default class FilmPresenter {
   };
 
   #handleControlClick = async (controlName) => {
-    await this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}});
-    // if(this.#popupComponent) {
-    //   this.rerenderPopup();
-    // }
+    const update = {...this.#filmItem, userDetails: {...this.#filmItem.userDetails, [controlName]: !this.#filmItem.userDetails[controlName]}};
+    await this.#changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, update);
+    await this.#changeModelData(UpdateType.MINOR, update);
   };
 
   rerenderPopup = () => {
+    console.log("RE RENDER POPUP")
     if (this.#popupComponent) {
       const popupScroll = this.#popupComponent?.element?.scrollTop ?? 0;
       remove(this.#popupComponent);
