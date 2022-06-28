@@ -6,7 +6,7 @@ import FilterPresenter from './presenter/filter-presenter';
 import FilmsApiService from './api-service';
 import ProfilePresenter from './presenter/profile-presenter';
 
-const AUTHORIZATION = 'Basic SJ2jk3i20932hnbu';
+const AUTHORIZATION = 'Basic SJ2jk3i20932hbnu';
 const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict/';
 
 const api = new FilmsApiService(END_POINT, AUTHORIZATION);

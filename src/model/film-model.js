@@ -83,6 +83,7 @@ export default class FilmModel extends Observable {
       ...this.#films.slice(index + 1),
     ];
 
+
     this.#mostCommentedFilms = null;
     this.#topRatedFilms = null;
 
@@ -96,7 +97,8 @@ export default class FilmModel extends Observable {
         alternativeTitle: film.film_info.alternative_title,
         totalRating: film.film_info.total_rating
       },
-      userDetails: {...film.user_details,
+      userDetails: {
+        ...film.user_details,
         alreadyWatched: film.user_details.already_watched,
         watchingDate: film.user_details.watching_date
       }

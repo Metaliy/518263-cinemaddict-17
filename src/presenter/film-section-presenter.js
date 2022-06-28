@@ -31,6 +31,7 @@ export default class FilmSectionPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #currentSortType = SortType.DEFAULT;
   #sourcedFilmSection = [];
+  #popupComponent = null;
 
   constructor(filmSectionContainer, filmModel, commentModel, filterModel, footerElement) {
     this.#mainBlock = filmSectionContainer;
@@ -43,7 +44,6 @@ export default class FilmSectionPresenter {
   }
 
   get films() {
-
     const filterType = this.#filterModel.filter;
     const films = this.#filmsModel.films;
     let filteredFilms = filter[filterType](films);
@@ -132,6 +132,7 @@ export default class FilmSectionPresenter {
   #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
+
         await this.#filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
@@ -173,11 +174,21 @@ export default class FilmSectionPresenter {
         this.#renderMainSection();
         break;
     }
+  };
 
+  #savePopup = (popup) => {
+    this.#popupComponent = popup;
   };
 
   #renderFilm =  (film, container, map) => {
-    const filmPresenter = new FilmPresenter(this.#commentModel, container, this.#handleViewAction, this.#handleModelEvent);
+    const filmPresenter = new FilmPresenter(
+      this.#commentModel,
+      container,
+      this.#handleViewAction,
+      this.#handleModelEvent,
+      this.#savePopup,
+      this.#popupComponent?.filmItem?.id === film.id ? this.#popupComponent : null,
+    );
     filmPresenter.init(film);
     map.set(film.id, filmPresenter);
   };

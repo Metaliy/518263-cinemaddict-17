@@ -64,7 +64,7 @@ export default class FilmCardView extends AbstractView {
 
   #filmControlClickHandler = (evt, callback, controlName) => {
     evt.preventDefault();
-    callback([controlName]);
+    callback(controlName);
   };
 
   setWatchlistClickHandler = (callback) => {
