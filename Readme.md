@@ -1,6 +1,6 @@
 # Проект «Киноман»
 
-* Студент: [Виталий Кунсков](https://up.htmlacademy.ru/ecmascript/17/user/518263).
+* Студент: [Виталий](https://up.htmlacademy.ru/ecmascript/17/user/518263).
 * Наставник: [Глеб Клецков](https://htmlacademy.ru/profile/id1487865).
 
 ---
